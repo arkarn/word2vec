@@ -23,7 +23,7 @@ var (
 )
 
 // FromReader creates a Model using the binary model data provided by the io.Reader.
-func FromReader(r io.Reader) (*Model, error) {
+func FromReader(r io.Reader, normalize bool) (*Model, error) {
 	br := bufio.NewReader(r)
 	var size, dim int
 	n, err := fmt.Fscanln(r, &size, &dim)
@@ -53,7 +53,9 @@ func FromReader(r io.Reader) (*Model, error) {
 			return nil, err
 		}
 
-		//v.Normalise()   //remove normalization since dish embedding model needs magnitude as well
+		if normalize {
+			v.Normalise()
+		}
 
 		m.words[w] = v
 
